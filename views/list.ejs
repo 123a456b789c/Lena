@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@picocss/pico@1/css/pico.min.css">
+    <title>Betöltött lista</title>
+    <script>
+        window.questionArray = <%- JSON.stringify(questionArray) %>;
+        window.answerArray = <%- JSON.stringify(answerArray) %>;
+        function setRender() {
+            document.getElementById("brender").innerText= "kliens: " + new String(window.performance.timing.domComplete-window.performance.timing.domContentLoadedEventEnd) + " ms";
+        }
+        function initialRender() {
+            window.mistakes = 0;
+            window.cardstate = "question"
+            var randomIndex = Math.floor(Math.random() * window.questionArray.length);
+            window.currenIndex = randomIndex;
+            document.getElementById("cardinside").innerHTML = "<p>" + window.questionArray[randomIndex] + "</p>";
+            setRemaining();
+        }
+        function renderNextCard() {
+            window.cardstate = "question"
+            questionArray.splice(window.currenIndex, 1);
+            answerArray.splice(window.currenIndex, 1);
+            var randomIndex = Math.floor(Math.random() * window.questionArray.length);
+            window.currenIndex = randomIndex;
+            document.getElementById("cardinside").innerHTML = "<p>" + window.questionArray[randomIndex] + "</p>";
+            if (window.questionArray.length == 0) {
+                document.getElementById("cardinside").innerHTML = '<a onclick="location.reload()">Gratulálok, kifogytál a kártyákból! (katt ide, ha újra)</a>';
+            }
+            setRemaining();
+        }
+        function renderNextCardNoDelete() {
+            window.mistakes = window.mistakes + 1;
+            window.cardstate = "question"
+            var randomIndex = Math.floor(Math.random() * window.questionArray.length);
+            window.currenIndex = randomIndex;
+            document.getElementById("cardinside").innerHTML = "<p>" + window.questionArray[randomIndex] + "</p>";
+            setRemaining();
+        }
+        function flipCard() {
+            if (window.questionArray.length == 0) {
+                document.getElementById("cardinside").innerHTML = '<a onclick="location.reload()">Gratulálok, kifogytál a kártyákból! (katt ide, ha újra)</a>';
+                return;
+            }
+            if (window.cardstate == "question") {
+                window.cardstate = "answer";
+                document.getElementById("cardinside").innerHTML = "<p>" + window.answerArray[window.currenIndex] + "</p>";
+            } else {
+                window.cardstate = "question";
+                document.getElementById("cardinside").innerHTML = "<p>" + window.questionArray[window.currenIndex] + "</p>";
+            }
+        }
+        function setRemaining() {
+            document.getElementById("remaining").innerText = "Vissza van még: " +  window.questionArray.length + " db (eddig " + window.mistakes + " hibád van)";
+        }
+    </script>
+</head>
+<body onload="setRender();initialRender()">
+    <nav>
+        <ul>
+          <li><strong style="margin-left: 10px;"><%- listname %></strong></li>
+
+        </ul>
+        <ul>
+            <li><strong style="margin-right: 10px;">szerver: <%- time %> ms</strong></li>
+            <li><strong id="brender" style="margin-right: 10px;"></strong></li>
+        </ul>
+    </nav>
+    <div style="margin-left: 10px; margin-right: 10px;">
+    <article>
+        <header><p style="margin-bottom: 10px;" id="remaining"></p></header>
+        <div id="cardinside"></div>
+        <footer>
+            <div class="grid">
+            <button style="background-color: green; border-color: green;"  onclick="renderNextCard()">Tudtam</button>
+            <button onclick="flipCard()">Megfordítás</button>
+            <button style="background-color: rgb(138, 0, 0); border-color: rgb(138, 0, 0);" onclick="renderNextCardNoDelete()">Nem tudtam</button>
+            </div>
+        </footer>
+    </article>
+    </div>
+</body>
+</html>
