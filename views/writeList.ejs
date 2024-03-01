@@ -2,16 +2,12 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="user-scalable=no, width=device-width, initial-scale=1, maximum-scale=1">
-    <script src="https://hammerjs.github.io/dist/hammer.min.js"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@picocss/pico@1/css/pico.min.css">
     <title>Betöltött lista</title>
     <script>
         window.questionArray = <%- JSON.stringify(questionArray) %>;
         window.answerArray = <%- JSON.stringify(answerArray) %>;
-        window.answerArrayClone =  <%- JSON.stringify(answerArray) %>;
-        window.questionArrayClone =  <%- JSON.stringify(questionArray) %>;
-        window.canSwipe = true;
         function setRender() {
             document.getElementById("brender").innerText= "kliens: " + new String(window.performance.timing.domComplete-window.performance.timing.domContentLoadedEventEnd) + " ms";
         }
@@ -22,34 +18,10 @@
             window.currenIndex = randomIndex;
             document.getElementById("cardinside").innerHTML = "<p>" + window.questionArray[randomIndex] + "</p>";
             setRemaining();
-
-            var article = document.getElementById('hammer-area');
-            var mc = new Hammer(article);
-            mc.get('pan').set({ direction: Hammer.DIRECTION_ALL });
-            mc.on("panleft panright tap", function(ev) {
-                 if (ev.type == "panleft") {
-                    if (window.canSwipe == false) {
-                        return;
-                    }
-                    renderNextCard();
-                    window.canSwipe = false;
-                    setTimeout(function() {
-                        window.canSwipe = true;
-                    }, 300);
-                 }
-                 if (ev.type == "panright") {
-                    if (window.canSwipe == false) {
-                        return;
-                    }       
-                    renderNextCardNoDelete();
-                    window.canSwipe = false;
-                    setTimeout(function() {
-                        window.canSwipe = true;
-                    }, 300);
-                 }
-            });
         }
         function renderNextCard() {
+            document.getElementById("flip-button").disabled = false;
+            document.getElementById("answer").value = "";
             window.cardstate = "question"
             questionArray.splice(window.currenIndex, 1);
             answerArray.splice(window.currenIndex, 1);
@@ -57,11 +29,13 @@
             window.currenIndex = randomIndex;
             document.getElementById("cardinside").innerHTML = "<p>" + window.questionArray[randomIndex] + "</p>";
             if (window.questionArray.length == 0) {
-                document.getElementById("cardinside").innerHTML = '<a onclick="reset()">Gratulálok, kifogytál a kártyákból! (katt ide, ha újra)</a>';
+                document.getElementById("cardinside").innerHTML = '<a onclick="location.reload()">Gratulálok, kifogytál a kártyákból! (katt ide, ha újra)</a>';
             }
             setRemaining();
         }
         function renderNextCardNoDelete() {
+            document.getElementById("flip-button").disabled = false;
+            document.getElementById("answer").value = "";
             window.mistakes = window.mistakes + 1;
             window.cardstate = "question"
             var randomIndex = Math.floor(Math.random() * window.questionArray.length);
@@ -71,29 +45,28 @@
         }
         function flipCard() {
             if (window.questionArray.length == 0) {
-                document.getElementById("cardinside").innerHTML = '<a onclick="reset()">Gratulálok, kifogytál a kártyákból! (katt ide, ha újra)</a>';
+                document.getElementById("cardinside").innerHTML = '<a onclick="location.reload()">Gratulálok, kifogytál a kártyákból! (katt ide, ha újra)</a>';
                 return;
             }
             if (window.cardstate == "question") {
                 window.cardstate = "answer";
-                document.getElementById("cardinside").innerHTML = "<p>" + window.answerArray[window.currenIndex] + "</p>";
-            } else {
-                window.cardstate = "question";
-                document.getElementById("cardinside").innerHTML = "<p>" + window.questionArray[window.currenIndex] + "</p>";
+                var userAnser = document.getElementById("answer").value
+                var correctAnswer = window.answerArray[window.currenIndex]
+                var answerString = ""
+                for (var i = 0; i < correctAnswer.length; i++) {
+                    if (userAnser[i] != correctAnswer[i]) {
+                        answerString = answerString + "<span style='color: red;'>" + correctAnswer[i] + "</span>"
+                    } else {
+                        answerString = answerString + "<span style='color: green;'>" + correctAnswer[i] + "</span>"
+                    }
+                }
+                document.getElementById("cardinside").innerHTML = "<p>" + answerString + "</p>";
+                document.getElementById("flip-button").disabled = true;
+                document.getElementById("answer").value = "";
             }
         }
         function setRemaining() {
             document.getElementById("remaining").innerText = "Vissza van még: " +  window.questionArray.length + " db (eddig " + window.mistakes + " hibád van)";
-        }
-        function reset() {
-            window.questionArray = window.questionArrayClone;
-            window.answerArray = window.answerArrayClone;
-            window.mistakes = 0;
-            window.cardstate = "question"
-            var randomIndex = Math.floor(Math.random() * window.questionArray.length);
-            window.currenIndex = randomIndex;
-            document.getElementById("cardinside").innerHTML = "<p>" + window.questionArray[randomIndex] + "</p>";
-            setRemaining();
         }
     </script>
     <style>
@@ -115,13 +88,14 @@
         </ul>
     </nav>
     <div style="margin-left: 10px; margin-right: 10px;">
-    <article id="hammer-area">
+    <article>
         <header><p style="margin-bottom: 10px;" id="remaining"></p></header>
         <div id="cardinside"></div>
+        <input type="text" id="answer" placeholder="Válaszod">
         <footer>
             <div class="grid">
             <button style="background-color: green; border-color: green;"  onclick="renderNextCard()">Tudtam</button>
-            <button onclick="flipCard()">Megfordítás</button>
+            <button onclick="flipCard()" id="flip-button">Megfordítás</button>
             <button style="background-color: rgb(138, 0, 0); border-color: rgb(138, 0, 0);" onclick="renderNextCardNoDelete()">Nem tudtam</button>
             </div>
         </footer>
