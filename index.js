@@ -9,6 +9,10 @@ const port = process.env.PORT || 3000;
 
 app.set('view engine', 'ejs');
 
+app.get('/', async (req, res) => {
+    res.redirect('/guest');
+});
+
 app.get('/:jwt', async (req, res) => {
     var startTime = Date.now();
     var decoded = ""
