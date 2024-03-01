@@ -5,13 +5,11 @@ const jwt = require('jsonwebtoken');
 const dotenv = require('dotenv').config();
 const fs = require('fs');
 const path = require('path');
-const port = 3000 || process.env.PORT;
-
-
+const port = process.env.PORT || 3000;
 
 app.set('view engine', 'ejs');
 
-app.get('/getLists/:jwt', async (req, res) => {
+app.get('/:jwt', async (req, res) => {
     var startTime = Date.now();
     var decoded = ""
     try {
@@ -25,9 +23,9 @@ app.get('/getLists/:jwt', async (req, res) => {
     }
     var listDir = path.join(__dirname, 'lists');
     var files = fs.readdirSync(listDir);
-    var lists = [];
+    var lists = ""
     files.forEach(file => {
-        lists.push(`<a href="/loadList/${file}">${file.replace(".txt","")}</a>`);
+        lists += `<a href="/loadList/${file}">${file.replace(".txt","")}</a></br>`
     });
     var stopTime = Date.now();
     var time = stopTime - startTime;
@@ -48,9 +46,10 @@ app.get('/loadList/:list', async (req, res) => {
         res.render('invalid', { error: 'A lista nem létezik.' });
         return;
     }
-    var listArray = list.split('\r\n');
+    var listArray = list.split('\n');
     var questionArray = [];
     var answerArray = [];
+    //console.log(listArray)
     listArray.forEach((item, index) => {
         questionArray.push(item.split('\t')[1]);
         answerArray.push(item.split('\t')[0]);
