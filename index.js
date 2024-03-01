@@ -27,16 +27,17 @@ app.get('/:jwt', async (req, res) => {
     }
     var listDir = path.join(__dirname, 'lists');
     var files = fs.readdirSync(listDir);
-    var lists = "<table><tr><th>Lista neve</th><th>Kártya</th><th>Irás</th><th>Nyers</th><th>Nézegető</th></tr>";
+    var lists = "<table><tr><th>Lista neve</th><th></th><th></th><th></th></tr>";
     files.forEach(file => {
-        lists += `<tr><td>${file.replace(".txt","")}</td><td><a href="/loadList/${file}">Kártya</a></td><td><a href="/writeList/${file}">Írás</a></td><td><a href="/rawList/${file}">Nyers</a></td><td><a href="/viewList/${file}">Nézegető</a></td></tr>`
+        lists += `<tr><td><a href="/rawList/${file}">${file.replace(".txt","")}</a></td><td><a href="/loadList/${file}">Kártya</a></td><td><a href="/writeList/${file}">Írás</a></td><td><a href="/viewList/${file}">Nézegető</a></td></tr>`
     });
     var stopTime = Date.now();
     var time = stopTime - startTime;
     if (req.params.jwt == "guest") {
         console.log("[MEGNYITÁS] A felhasználó megnyitotta a listákat.", "guest");
+        fs.appendFileSync('log.txt', `[MEGNYITÁS] A felhasználó megnyitotta a listákat. (guest)  ${new Date().toISOString()} ${req.headers['x-forwarded-for'] || req.connection.remoteAddress}\n`);
     } else {
-    console.log("[MEGNYITÁS] A felhasználó megnyitotta a listákat.", decoded.username);
+        fs.appendFileSync('log.txt', `[MEGNYITÁS] A felhasználó megnyitotta a listákat. (${decoded.username})  ${new Date().toISOString()} ${req.headers['x-forwarded-for'] || req.connection.remoteAddress}\n`);
     }
     res.render('lists', { lists: lists, time: time });
 });
