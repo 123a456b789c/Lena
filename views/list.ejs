@@ -48,8 +48,11 @@
                     }, 400);
                  }
                     if (ev.type == "tap" && ev.target.tagName != "BUTTON") {
-                        window.canSwipe = false;
+                        if (window.canSwipe == false) {
+                        return;
+                        }   
                         flipCard();
+                        window.canSwipe = false;
                         setTimeout(function() {
                             window.canSwipe = true;
                         }, 400);
