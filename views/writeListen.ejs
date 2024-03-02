@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@picocss/pico@1/css/pico.min.css">
-    <title>Write</title>
+    <title>Írás</title>
     <script>
         window.questionArray = <%- JSON.stringify(questionArray) %>;
         window.answerArray = <%- JSON.stringify(answerArray) %>;
@@ -29,7 +29,7 @@
             window.currenIndex = randomIndex;
             document.getElementById("cardinside").innerHTML = "<p>" + window.questionArray[randomIndex] + "</p>";
             if (window.questionArray.length == 0) {
-                document.getElementById("cardinside").innerHTML = '<a onclick="location.reload()">Gratulálok, kifogytál a kártyákból! (katt ide, ha újra)</a>';
+                document.getElementById("cardinside").innerHTML = '<a onclick="location.reload()">Congrats, you are out of cards! (click here to restart)</a>';
             }
             setRemaining();
         }
@@ -45,7 +45,7 @@
         }
         function flipCard() {
             if (window.questionArray.length == 0) {
-                document.getElementById("cardinside").innerHTML = '<a onclick="location.reload()">Gratulálok, kifogytál a kártyákból! (katt ide, ha újra)</a>';
+                document.getElementById("cardinside").innerHTML = '<a onclick="location.reload()">Congrats, you are out of cards! (click here to restart)</a>';
                 return;
             }
             if (window.cardstate == "question") {
@@ -66,8 +66,7 @@
             }
         }
         function setRemaining() {
-            document.getElementById("remaining").innerText = "Vissza van még: " +  window.questionArray.length + " db (eddig " + window.mistakes + " hibád van)";
-        }
+            document.getElementById("remaining").innerText = "Cards left: " +  window.questionArray.length + " (you have " + window.mistakes + " mistakes so far)";
     </script>
     <style>
         div > p {
@@ -91,12 +90,12 @@
     <article>
         <header><p style="margin-bottom: 10px;" id="remaining"></p></header>
         <div id="cardinside"></div>
-        <input type="text" id="answer" placeholder="Válaszod">
+        <input type="text" id="answer" placeholder="Answer">
         <footer>
             <div class="grid">
-            <button style="background-color: green; border-color: green;"  onclick="renderNextCard()">Tudtam</button>
-            <button onclick="flipCard()" id="flip-button">Megfordítás</button>
-            <button style="background-color: rgb(138, 0, 0); border-color: rgb(138, 0, 0);" onclick="renderNextCardNoDelete()">Nem tudtam</button>
+            <button style="background-color: green; border-color: green;"  onclick="renderNextCard()">I knew it</button>
+            <button onclick="flipCard()" id="flip-button">Check</button>
+            <button style="background-color: rgb(138, 0, 0); border-color: rgb(138, 0, 0);" onclick="renderNextCardNoDelete()">I didn't know it</button>
             </div>
         </footer>
     </article>

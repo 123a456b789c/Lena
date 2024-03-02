@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@picocss/pico@1/css/pico.min.css">
+    <title>Írás</title>
+    <script>
+        window.questionArray = <%- JSON.stringify(questionArray) %>;
+        window.answerArray = <%- JSON.stringify(answerArray) %>;
+        function setRender() {
+            document.getElementById("brender").innerText= "d-cli: " + new String(window.performance.timing.domComplete-window.performance.timing.domContentLoadedEventEnd) + " ms";
+        }
+        function initialRender() {
+            window.mistakes = 0;
+            window.cardstate = "question"
+            var randomIndex = Math.floor(Math.random() * window.questionArray.length);
+            window.currenIndex = randomIndex;
+            document.getElementById("cardinside").innerHTML = "<p>" + window.questionArray[randomIndex] + "</p>";
+            setRemaining();
+        }
+        function renderNextCard() {
+            document.getElementById("flip-button").disabled = false;
+            document.getElementById("answer").value = "";
+            window.cardstate = "question"
+            questionArray.splice(window.currenIndex, 1);
+            answerArray.splice(window.currenIndex, 1);
+            var randomIndex = Math.floor(Math.random() * window.questionArray.length);
+            window.currenIndex = randomIndex;
+            document.getElementById("cardinside").innerHTML = "<p>" + window.questionArray[randomIndex] + "</p>";
+            if (window.questionArray.length == 0) {
+                document.getElementById("cardinside").innerHTML = '<a onclick="location.reload()">Gratulálok, kifogytál a kártyákból! (katt ide, ha újra)</a>';
+            }
+            setRemaining();
+        }
+        function renderNextCardNoDelete() {
+            document.getElementById("flip-button").disabled = false;
+            document.getElementById("answer").value = "";
+            window.mistakes = window.mistakes + 1;
+            window.cardstate = "question"
+            var randomIndex = Math.floor(Math.random() * window.questionArray.length);
+            window.currenIndex = randomIndex;
+            document.getElementById("cardinside").innerHTML = "<p>" + window.questionArray[randomIndex] + "</p>";
+            setRemaining();
+        }
+        function flipCard() {
+            if (window.questionArray.length == 0) {
+                document.getElementById("cardinside").innerHTML = '<a onclick="location.reload()">Gratulálok, kifogytál a kártyákból! (katt ide, ha újra)</a>';
+                return;
+            }
+            if (window.cardstate == "question") {
+                window.cardstate = "answer";
+                var userAnser = document.getElementById("answer").value
+                var correctAnswer = window.answerArray[window.currenIndex]
+                var answerString = ""
+                for (var i = 0; i < correctAnswer.length; i++) {
+                    if (userAnser[i] != correctAnswer[i]) {
+                        answerString = answerString + "<span style='color: red;'>" + correctAnswer[i] + "</span>"
+                    } else {
+                        answerString = answerString + "<span style='color: green;'>" + correctAnswer[i] + "</span>"
+                    }
+                }
+                document.getElementById("cardinside").innerHTML = "<p>" + answerString + "</p>";
+                document.getElementById("flip-button").disabled = true;
+                document.getElementById("answer").value = "";
+            }
+        }
+        function setRemaining() {
+            document.getElementById("remaining").innerText = "Vissza van még: " +  window.questionArray.length + " db (eddig " + window.mistakes + " hibád van)";
+        }
+    </script>
+    <style>
+        div > p {
+            font-size: 1.5em;
+            text-align: center;
+        }
+    </style>
+</head>
+<body onload="setRender();initialRender()">
+    <nav>
+        <ul>
+          <li><strong style="margin-left: 10px;"><%- listname %></strong></li>
+
+        </ul>
+        <ul style="margin-right: 0px !important">
+            <li><strong style="margin-right: 10px;">d-ssr: <%- time %> ms</strong></li>
+            <li><strong id="brender" style="margin-right: 0px;"></strong></li>
+        </ul>
+    </nav>
+    <div style="margin-left: 10px; margin-right: 10px;">
+    <article>
+        <header><p style="margin-bottom: 10px;" id="remaining"></p></header>
+        <div id="cardinside"></div>
+        <input type="text" id="answer" placeholder="Válaszod">
+        <footer>
+            <div class="grid">
+            <button style="background-color: green; border-color: green;"  onclick="renderNextCard()">Tudtam</button>
+            <button onclick="flipCard()" id="flip-button">Megfordítás</button>
+            <button style="background-color: rgb(138, 0, 0); border-color: rgb(138, 0, 0);" onclick="renderNextCardNoDelete()">Nem tudtam</button>
+            </div>
+        </footer>
+    </article>
+    </div>
+</body>
+</html>

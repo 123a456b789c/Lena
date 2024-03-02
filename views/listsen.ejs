@@ -23,8 +23,8 @@
         }
         async function makeGreeting() {
             var quote = await fetch("https://api.quotable.io/random")
-            const womanGreeing = ["Szia!", "Helló!", "Üdvözöllek!", "Üdvözlet, hölgyem!", "Üdv kisasszony!", "Sugárzóan nézel ki ma!", "Milyen szép a mosolyod!", "Készen állsz a mai adagra?", "Inspiráló vagy!", "Szerintem tudsz mindent!", "Kitartás!"]
-            const manGreeing = ["Szia!", "Helló!", "Üdvözöllek!", "Veressük főni!","Vágjunk bele!","Legyünk túl rajta!", "Indulhatunk!", "Leg day?", "Ki vagy gyúra öregem!", "Kész vagy a mai adagra?", "Hány perc van a dogáig?", "Mi járatban?", "Most álltál neki?"]
+            const womanGreeing = ["Hi!", "Hello!", "Welcome!", "Let's get it done!", "Let's do it!", "Let's get over it!", "You look amazing!"]
+            const manGreeing = ["Hi!", "Hello!", "Welcome!", "Let's get it done!", "Let's do it!", "Let's get over it!", "You look ripped!"]
             if (document.cookie.includes("woman")) {
                 var json = await quote.json()
                 document.getElementById("greetDiv").innerHTML = '<h1 style="margin-bottom: 5px;font-size: 1.3em">' + womanGreeing[Math.floor(Math.random() * womanGreeing.length)] + "</h1>"
@@ -36,7 +36,7 @@
                 document.getElementById("greetDiv").innerHTML += '<p style="margin-bottom: 5px;font-size: 1em;font-style:italic">' + json.content + "</p>"
                 document.getElementById("greetDiv").innerHTML += '<p style="margin-bottom: 5px;font-size: 1em">- ' + json.author + "</p>"
             } else {
-                document.getElementById("greetDiv").innerHTML = '<h1 style="margin-bottom: 5px;font-size: 1.3em">Szia!</h1>'
+                document.getElementById("greetDiv").innerHTML = '<h1 style="margin-bottom: 5px;font-size: 1.3em">Hi!</h1>'
             }
         }
     </script>
@@ -45,6 +45,7 @@
     <nav>
         <ul>
           <li><strong style="margin-left: 10px;">Lists</strong></li>
+          <li><a href="./hu">Switch to HU</a></li>
 
         </ul>
         <ul style="margin-right: 0px;">
@@ -53,7 +54,7 @@
         </ul>
     </nav>
     <div id="genderDiv" style="margin-top: 10px; margin-left: 10px; margin-right: 10px; display: inline-block">
-    <p style="display: inline-block; margin-right: 3px;">Nemem (nem kerül küldésre):</p><a style="display: inline-block; margin-right: 5px;" onclick="setupGender('woman')">Nő</a> <a style="display: inline-block;" onclick="setupGender('man')">Férfi</a>
+    <p style="display: inline-block; margin-right: 3px;">Gender (won't be sent to the server):</p><a style="display: inline-block; margin-right: 5px;" onclick="setupGender('woman')">Woman</a> <a style="display: inline-block;" onclick="setupGender('man')">Man</a>
     </div>
     <div id="greetDiv" style="margin-left: 10px; margin-right: 10px;"></div>
     <div style="margin-top: 10px; margin-left: 10px; margin-right: 10px;">

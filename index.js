@@ -10,7 +10,7 @@ const port = process.env.PORT || 3000;
 app.set('view engine', 'ejs');
 
 app.get('/', async (req, res) => {
-    res.redirect('/guest');
+    res.redirect('/guest/hu');
 });
 
 app.get("/encoder", async (req, res) => {
@@ -19,7 +19,8 @@ app.get("/encoder", async (req, res) => {
     res.render('encoder', { time: stopTime - startTime });
 });
 
-app.get('/:jwt', async (req, res) => {
+app.get('/:jwt/:lang', async (req, res) => {
+    const lang = req.params.lang;
     var startTime = Date.now();
     var decoded = ""
     try {
@@ -35,7 +36,7 @@ app.get('/:jwt', async (req, res) => {
     var files = fs.readdirSync(listDir);
     var lists = "<table><tr><th>Lista neve</th><th></th><th></th><th></th></tr>";
     files.forEach(file => {
-        lists += `<tr><td><a href="/rawList/${file}">${file.replace(".txt","")}</a></td><td><a href="/loadList/${file}">Kártya</a></td><td><a href="/writeList/${file}">Írás</a></td><td><a href="/viewList/${file}">Nézegető</a></td></tr>`
+        lists += `<tr><td><a href="/rawList/${file}">${file.replace(".txt","")}</a></td><td><a href="/loadList/${file}/${lang}">Kártya</a></td><td><a href="/writeList/${file}/${lang}">Írás</a></td><td><a href="/viewList/${file}/${lang}">Nézegető</a></td></tr>`
     });
     var stopTime = Date.now();
     var time = stopTime - startTime;
@@ -45,10 +46,10 @@ app.get('/:jwt', async (req, res) => {
     } else {
         fs.appendFileSync('log.txt', `[MEGNYITÁS] A felhasználó megnyitotta a listákat. (${decoded.username})  ${new Date().toISOString()} ${req.headers['x-forwarded-for'] || req.connection.remoteAddress}\n`);
     }
-    res.render('lists', { lists: lists, time: time });
+    res.render('lists' + lang, { lists: lists, time: time });
 });
 
-app.get('/loadList/:list', async (req, res) => {
+app.get('/loadList/:list/:lang', async (req, res) => {
     var startTime = Date.now();
     var listDir = path.join(__dirname, 'lists');
     try {
@@ -87,11 +88,11 @@ app.get('/loadList/:list', async (req, res) => {
     }
     var stopTime = Date.now();
     var time = stopTime - startTime;
-    res.render('list', {listname: req.params.list.replace(".txt",""), time: time, questionArray: questionArray, answerArray: answerArray });
+    res.render('list' + req.params.lang, {listname: req.params.list.replace(".txt",""), time: time, questionArray: questionArray, answerArray: answerArray });
     fs.appendFileSync('log.txt', `[MEGNYITÁS] Egy felhasználó megnyitotta a listát. (${req.params.list.replace(".txt","")})  ${new Date().toISOString()} ${req.headers['x-forwarded-for'] || req.connection.remoteAddress}\n`);
 })
 
-app.get('/writeList/:list', async (req, res) => {
+app.get('/writeList/:list/:lang', async (req, res) => {
     var startTime = Date.now();
     var listDir = path.join(__dirname, 'lists');
     try {
@@ -130,10 +131,10 @@ app.get('/writeList/:list', async (req, res) => {
     }
     var stopTime = Date.now();
     var time = stopTime - startTime;
-    res.render('writeList', {listname: req.params.list.replace(".txt",""), time: time, questionArray: questionArray, answerArray: answerArray });
+    res.render('writeList'  + req.params.lang, {listname: req.params.list.replace(".txt",""), time: time, questionArray: questionArray, answerArray: answerArray });
 })
 
-app.get('/viewList/:list', async (req, res) => {
+app.get('/viewList/:list/:lang', async (req, res) => {
     var startTime = Date.now();
     var listDir = path.join(__dirname, 'lists');
     try {
@@ -172,10 +173,10 @@ app.get('/viewList/:list', async (req, res) => {
     }
     var stopTime = Date.now();
     var time = stopTime - startTime;
-    res.render('viewer', {listname: req.params.list.replace(".txt",""), time: time, questionArray: questionArray, answerArray: answerArray });
+    res.render('viewer'  + req.params.lang, {listname: req.params.list.replace(".txt",""), time: time, questionArray: questionArray, answerArray: answerArray });
 })
 
-app.get('/rawList/:list', async (req, res) => {
+app.get('/rawList/:list/', async (req, res) => {
     var listDir = path.join(__dirname, 'lists');
     try {
     var list = fs.readFileSync(path.join(listDir, req.params.list), 'utf8');

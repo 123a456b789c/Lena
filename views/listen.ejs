@@ -5,7 +5,7 @@
     <meta name="viewport" content="user-scalable=no, width=device-width, initial-scale=1, maximum-scale=1">
     <script src="https://hammerjs.github.io/dist/hammer.min.js"></script>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@picocss/pico@1/css/pico.min.css">
-    <title>Loaded list</title>
+    <title>Tanulókártya</title>
     <script>
         window.questionArray = <%- JSON.stringify(questionArray) %>;
         window.answerArray = <%- JSON.stringify(answerArray) %>;
@@ -13,7 +13,7 @@
         window.questionArrayClone =  <%- JSON.stringify(questionArray) %>;
         window.canSwipe = true;
         function setRender() {
-            document.getElementById("brender").innerText= "kliens: " + new String(window.performance.timing.domComplete-window.performance.timing.domContentLoadedEventEnd) + " ms";
+            document.getElementById("brender").innerText= "d-cli: " + new String(window.performance.timing.domComplete-window.performance.timing.domContentLoadedEventEnd) + " ms";
         }
         function initialRender() {
             window.mistakes = 0;
@@ -67,7 +67,7 @@
             window.currenIndex = randomIndex;
             document.getElementById("cardinside").innerHTML = "<p>" + window.questionArray[randomIndex] + "</p>";
             if (window.questionArray.length == 0) {
-                document.getElementById("cardinside").innerHTML = '<a onclick="reset()">Gratulálok, kifogytál a kártyákból! (katt ide, ha újra)</a>';
+                document.getElementById("cardinside").innerHTML = '<a onclick="reset()">Congrats, you are out of cards! (click here to restart)</a>';
             }
             setRemaining();
         }
@@ -81,7 +81,7 @@
         }
         function flipCard() {
             if (window.questionArray.length == 0) {
-                document.getElementById("cardinside").innerHTML = '<a onclick="reset()">Gratulálok, kifogytál a kártyákból! (katt ide, ha újra)</a>';
+                document.getElementById("cardinside").innerHTML = '<a onclick="reset()">Congrats, you are out of cards! (click here to restart)</a>';
                 return;
             }
             if (window.cardstate == "question") {
@@ -93,7 +93,7 @@
             }
         }
         function setRemaining() {
-            document.getElementById("remaining").innerText = "Vissza van még: " +  window.questionArray.length + " db (eddig " + window.mistakes + " hibád van)";
+            document.getElementById("remaining").innerText = "Cards left: " +  window.questionArray.length + " (you have " + window.mistakes + " mistakes so far)";
         }
         function reset() {
             window.questionArray = [...window.questionArrayClone];
@@ -120,7 +120,7 @@
 
         </ul>
         <ul style="margin-right: 0px !important">
-            <li><strong style="margin-right: 10px;">szerver: <%- time %> ms</strong></li>
+            <li><strong style="margin-right: 10px;">d-ssr: <%- time %> ms</strong></li>
             <li><strong id="brender" style="margin-right: 0px;"></strong></li>
         </ul>
     </nav>
@@ -130,9 +130,9 @@
         <div id="cardinside"></div>
         <footer>
             <div class="grid">
-            <button style="background-color: green; border-color: green;"  onclick="renderNextCard()">Tudtam</button>
-            <button onclick="flipCard()">Megfordítás</button>
-            <button style="background-color: rgb(138, 0, 0); border-color: rgb(138, 0, 0);" onclick="renderNextCardNoDelete()">Nem tudtam</button>
+            <button style="background-color: green; border-color: green;"  onclick="renderNextCard()">I knew it</button>
+            <button onclick="flipCard()">Flip card</button>
+            <button style="background-color: rgb(138, 0, 0); border-color: rgb(138, 0, 0);" onclick="renderNextCardNoDelete()">I did'nt know it</button>
             </div>
         </footer>
     </article>
