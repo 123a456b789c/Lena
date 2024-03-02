@@ -82,6 +82,7 @@ app.get('/loadList/:list', async (req, res) => {
     var stopTime = Date.now();
     var time = stopTime - startTime;
     res.render('list', {listname: req.params.list.replace(".txt",""), time: time, questionArray: questionArray, answerArray: answerArray });
+    fs.appendFileSync('log.txt', `[MEGNYITÁS] Egy felhasználó megnyitotta a listát. (${req.params.list.replace(".txt","")})  ${new Date().toISOString()} ${req.headers['x-forwarded-for'] || req.connection.remoteAddress}\n`);
 })
 
 app.get('/writeList/:list', async (req, res) => {

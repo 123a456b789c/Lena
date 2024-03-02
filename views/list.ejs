@@ -35,7 +35,7 @@
                     window.canSwipe = false;
                     setTimeout(function() {
                         window.canSwipe = true;
-                    }, 300);
+                    }, 400);
                  }
                  if (ev.type == "panright") {
                     if (window.canSwipe == false) {
@@ -45,7 +45,7 @@
                     window.canSwipe = false;
                     setTimeout(function() {
                         window.canSwipe = true;
-                    }, 300);
+                    }, 400);
                  }
             });
         }
@@ -86,8 +86,8 @@
             document.getElementById("remaining").innerText = "Vissza van még: " +  window.questionArray.length + " db (eddig " + window.mistakes + " hibád van)";
         }
         function reset() {
-            window.questionArray = window.questionArrayClone;
-            window.answerArray = window.answerArrayClone;
+            window.questionArray = [...window.questionArrayClone];
+            window.answerArray = [...window.answerArrayClone];
             window.mistakes = 0;
             window.cardstate = "question"
             var randomIndex = Math.floor(Math.random() * window.questionArray.length);
