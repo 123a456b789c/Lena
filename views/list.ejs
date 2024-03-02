@@ -47,7 +47,7 @@
                         window.canSwipe = true;
                     }, 400);
                  }
-                    if (ev.type == "tap" && ev.target.tagName != "BUTTON") {
+                    if (ev.type == "tap" && ev.target.tagName != "BUTTON" && ev.target.tagName != "A") {
                         if (window.canSwipe == false) {
                         return;
                         }   

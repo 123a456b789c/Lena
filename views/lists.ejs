@@ -23,18 +23,20 @@
         }
         async function makeGreeting() {
             var quote = await fetch("https://api.quotable.io/random")
-            const womanGreeing = ["Szia!", "Helló!", "Üdvözöllek!", "Üdvözlet, hölgyem!", "Jó reggelt kisasszony!", "Sugárzóan nézel ki ma!", "Milyen szép a mosolyod!", "Készen állsz a mai adagra?", "Inspiráló vagy!"]
-            const manGreeing = ["Szia!", "Helló!", "Üdvözöllek!", "Veressük főni!","Vágjunk bele!","Legyünk túl rajta!", "Indulhatunk!", "Leg day?", "Ki vagy gyúra öregem!", "Kész vagy a mai adagra?", "Hány perc van a dogáig?"]
+            const womanGreeing = ["Szia!", "Helló!", "Üdvözöllek!", "Üdvözlet, hölgyem!", "Üdv kisasszony!", "Sugárzóan nézel ki ma!", "Milyen szép a mosolyod!", "Készen állsz a mai adagra?", "Inspiráló vagy!", "Szerintem tudsz mindent!", "Kitartás!"]
+            const manGreeing = ["Szia!", "Helló!", "Üdvözöllek!", "Veressük főni!","Vágjunk bele!","Legyünk túl rajta!", "Indulhatunk!", "Leg day?", "Ki vagy gyúra öregem!", "Kész vagy a mai adagra?", "Hány perc van a dogáig?", "Mi járatban?", "Most álltál neki?"]
             if (document.cookie.includes("woman")) {
                 var json = await quote.json()
                 document.getElementById("greetDiv").innerHTML = '<h1 style="margin-bottom: 5px;font-size: 1.3em">' + womanGreeing[Math.floor(Math.random() * womanGreeing.length)] + "</h1>"
                 document.getElementById("greetDiv").innerHTML += '<p style="margin-bottom: 5px;font-size: 1em;font-style:italic">' + json.content + "</p>"
                 document.getElementById("greetDiv").innerHTML += '<p style="margin-bottom: 5px;font-size: 1em">- ' + json.author + "</p>"
-            } else {
+            } else if (document.cookie.includes("man")) {
                 var json = await quote.json()
                 document.getElementById("greetDiv").innerHTML = '<h1 style="margin-bottom: 5px;font-size: 1.3em">' + manGreeing[Math.floor(Math.random() * manGreeing.length)] + "</h1>"
                 document.getElementById("greetDiv").innerHTML += '<p style="margin-bottom: 5px;font-size: 1em;font-style:italic">' + json.content + "</p>"
                 document.getElementById("greetDiv").innerHTML += '<p style="margin-bottom: 5px;font-size: 1em">- ' + json.author + "</p>"
+            } else {
+                document.getElementById("greetDiv").innerHTML = '<h1 style="margin-bottom: 5px;font-size: 1.3em">Szia!</h1>'
             }
         }
     </script>
