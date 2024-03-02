@@ -4,12 +4,12 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@picocss/pico@1/css/pico.min.css">
-    <title>Betöltött lista</title>
+    <title>Write</title>
     <script>
         window.questionArray = <%- JSON.stringify(questionArray) %>;
         window.answerArray = <%- JSON.stringify(answerArray) %>;
         function setRender() {
-            document.getElementById("brender").innerText= "kliens: " + new String(window.performance.timing.domComplete-window.performance.timing.domContentLoadedEventEnd) + " ms";
+            document.getElementById("brender").innerText= "d-cli: " + new String(window.performance.timing.domComplete-window.performance.timing.domContentLoadedEventEnd) + " ms";
         }
         function initialRender() {
             window.mistakes = 0;
@@ -83,7 +83,7 @@
 
         </ul>
         <ul style="margin-right: 0px !important">
-            <li><strong style="margin-right: 10px;">szerver: <%- time %> ms</strong></li>
+            <li><strong style="margin-right: 10px;">d-ssr: <%- time %> ms</strong></li>
             <li><strong id="brender" style="margin-right: 0px;"></strong></li>
         </ul>
     </nav>

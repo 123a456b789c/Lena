@@ -1,12 +1,12 @@
 {
-  "name": "flash",
-  "version": "1.0.0",
-  "description": "",
+  "name": "lena-server",
+  "version": "1.1.0",
+  "description": "A simple flashcard app server using express.js and minimal dependencies",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "author": "",
+  "author": "Lajos Mikula",
   "license": "ISC",
   "dependencies": {
     "dotenv": "^16.3.1",
