@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@picocss/pico@1/css/pico.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/2.0.0/FileSaver.min.js" integrity="sha512-csNcFYJniKjJxRWRV1R7fvnXrycHP6qDR21mgz1ZP55xY5d+aHLfo9/FcGDQLfn2IfngbAHd8LdfsagcCqgTcQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <title>Listák</title>
+    <script>
+        window.txt = "";
+        function setRender() {
+            document.getElementById("brender").innerText= "kliens: " + new String(window.performance.timing.domComplete-window.performance.timing.domContentLoadedEventEnd) + " ms";
+        }
+        function addListItem() {
+            var question = document.getElementById("question").value;
+            var answer = document.getElementById("answer").value;
+            if (question == "" || answer == "") {
+                alert("A kérdés és a válasz mező nem lehet üres!");
+                return;
+            }
+            document.getElementById("list").innerHTML += "<article style='margin: 10px !important'><p style='text-align: center;font-size:1.2em;margin-bottom: 0px'>" + question + " - " + answer + "</p></article>";
+            window.txt += answer + "\t" + question + "\n";
+            document.getElementById("question").value = "";
+            document.getElementById("answer").value = "";
+        }
+        function saveList() {;
+            var blob = new Blob([window.txt], {type: "text/plain;charset=utf-8"});
+            saveAs(blob, "list.txt");
+        }
+    </script>
+</head>
+<body onload="setRender()">
+    <nav>
+        <ul>
+          <li><strong style="margin-left: 10px;">Lista kódoló</strong></li>
+
+        </ul>
+        <ul style="margin-right: 0px;">
+            <li><strong style="margin-right: 10px;">szerver: <%- time %> ms</strong></li>
+            <li><strong id="brender" style="margin-right: 0px;"></strong></li>
+        </ul>
+    </nav>
+    <div style="margin-top: 10px; margin-left: 5vw; margin-right: 5vw;">
+    <article style="width: 100%;">
+    <header>
+    <h1 style="margin-bottom: 10px;">Új lista kódolása</h1>
+    </header>
+
+    <div style="margin-left: 6vw;";>
+    <input type="text" id="question" placeholder="Kérdés" style="margin-bottom: 10px;width: 70vw">
+    <input type="text" id="answer" placeholder="Válasz" style="margin-bottom: 10px; width: 70vw">
+    <button id="add" style="margin-bottom: 10px; width: 70vw;" onclick="addListItem()">Hozzáadás</button>
+    <button id="save" style="margin-bottom: 10px; width: 70vw;" onclick="saveList()">Letöltés</button>
+    </div>
+    </article>
+    <div id="list" style="margin-bottom: 10px;"></div>
+    </div>
+</body>
+</html>

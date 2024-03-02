@@ -13,6 +13,12 @@ app.get('/', async (req, res) => {
     res.redirect('/guest');
 });
 
+app.get("/encoder", async (req, res) => {
+    var startTime = Date.now();
+    var stopTime = Date.now();
+    res.render('encoder', { time: stopTime - startTime });
+});
+
 app.get('/:jwt', async (req, res) => {
     var startTime = Date.now();
     var decoded = ""

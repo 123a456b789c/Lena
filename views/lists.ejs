@@ -8,10 +8,38 @@
     <script>
         function setRender() {
             document.getElementById("brender").innerText= "kliens: " + new String(window.performance.timing.domComplete-window.performance.timing.domContentLoadedEventEnd) + " ms";
+            if (document.cookie.includes("sex")) {
+                document.getElementById("genderDiv").style.display = "none"
+            }
+        }
+        function setupGender(sex) {
+            if (sex == "woman") {
+                document.cookie = "sex=woman"
+            }
+            if (sex == "man") {
+                document.cookie = "sex=man"
+            }
+            document.getElementById("genderDiv").style.display = "none"
+        }
+        async function makeGreeting() {
+            var quote = await fetch("https://api.quotable.io/random")
+            const womanGreeing = ["Szia!", "Helló!", "Üdvözöllek!", "Üdvözlet, hölgyem!", "Jó reggelt kisasszony!", "Sugárzóan nézel ki ma!", "Milyen szép a mosolyod!", "Készen állsz a mai adagra?", "Inspiráló vagy!"]
+            const manGreeing = ["Szia!", "Helló!", "Üdvözöllek!", "Veressük főni!","Vágjunk bele!","Legyünk túl rajta!", "Indulhatunk!", "Leg day?", "Ki vagy gyúra öregem!", "Kész vagy a mai adagra?", "Hány perc van a dogáig?"]
+            if (document.cookie.includes("woman")) {
+                var json = await quote.json()
+                document.getElementById("greetDiv").innerHTML = '<h1 style="margin-bottom: 5px;font-size: 1.3em">' + womanGreeing[Math.floor(Math.random() * womanGreeing.length)] + "</h1>"
+                document.getElementById("greetDiv").innerHTML += '<p style="margin-bottom: 5px;font-size: 1em;font-style:italic">' + json.content + "</p>"
+                document.getElementById("greetDiv").innerHTML += '<p style="margin-bottom: 5px;font-size: 1em">- ' + json.author + "</p>"
+            } else {
+                var json = await quote.json()
+                document.getElementById("greetDiv").innerHTML = '<h1 style="margin-bottom: 5px;font-size: 1.3em">' + manGreeing[Math.floor(Math.random() * manGreeing.length)] + "</h1>"
+                document.getElementById("greetDiv").innerHTML += '<p style="margin-bottom: 5px;font-size: 1em;font-style:italic">' + json.content + "</p>"
+                document.getElementById("greetDiv").innerHTML += '<p style="margin-bottom: 5px;font-size: 1em">- ' + json.author + "</p>"
+            }
         }
     </script>
 </head>
-<body onload="setRender()">
+<body onload="setRender();makeGreeting()">
     <nav>
         <ul>
           <li><strong style="margin-left: 10px;">Listák</strong></li>
@@ -22,6 +50,10 @@
             <li><strong id="brender" style="margin-right: 0px;"></strong></li>
         </ul>
     </nav>
+    <div id="genderDiv" style="margin-top: 10px; margin-left: 10px; margin-right: 10px; display: inline-block">
+    <p style="display: inline-block; margin-right: 3px;">Nemem (nem kerül küldésre):</p><a style="display: inline-block; margin-right: 5px;" onclick="setupGender('woman')">Nő</a> <a style="display: inline-block;" onclick="setupGender('man')">Férfi</a>
+    </div>
+    <div id="greetDiv" style="margin-left: 10px; margin-right: 10px;"></div>
     <div style="margin-top: 10px; margin-left: 10px; margin-right: 10px;">
     <%- lists  %>
     </div>
