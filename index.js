@@ -19,6 +19,19 @@ app.get("/encoder", async (req, res) => {
     res.render('encoder', { time: stopTime - startTime });
 });
 
+app.get('/rawList/:list', async (req, res) => {
+    var listDir = path.join(__dirname, 'lists');
+    try {
+    var list = fs.readFileSync(path.join(listDir, req.params.list), 'utf8');
+    } catch(err)
+    {
+        res.render('invalid', { error: 'A lista nem létezik.' });
+        return;
+    }
+    res.sendFile(path.join(listDir, req.params.list));
+})
+
+
 app.get('/:jwt/:lang', async (req, res) => {
     const lang = req.params.lang;
     var startTime = Date.now();
@@ -195,19 +208,6 @@ app.get('/viewList/:list/:lang', async (req, res) => {
     var time = stopTime - startTime;
     res.render(req.params.lang + '-viewer', {listname: req.params.list.replace(".txt",""), time: time, questionArray: questionArray, answerArray: answerArray });
 })
-
-app.get('/rawList/:list/', async (req, res) => {
-    var listDir = path.join(__dirname, 'lists');
-    try {
-    var list = fs.readFileSync(path.join(listDir, req.params.list), 'utf8');
-    } catch(err)
-    {
-        res.render('invalid', { error: 'A lista nem létezik.' });
-        return;
-    }
-    res.sendFile(path.join(listDir, req.params.list));
-})
-
 
 
 app.listen(port, () => {
