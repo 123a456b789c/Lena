@@ -48,13 +48,13 @@ app.get('/:jwt/:lang', async (req, res) => {
     files.forEach(file => {
         switch (lang) {
             case "hu":
-                lists += `<tr><td><a href="/rawList/${file}">${file.replace(".txt","")}</a></td><td><a href="/loadList/${file}/${lang}">Kártya</a></td><td><a href="/writeList/${file}/${lang}">Írás</a></td><td><a href="/viewList/${file}/${lang}">Nézegető</a></td></tr>`
+                lists += `<tr><td><a href="/rawList/${file}">${file.replace(".txt","")}</a></td><td><a href="/loadList/${file}/${lang}">Kártya</a></td><td><a href="/writeList/${file}/${lang}">Írás</a></td><td><a href="/viewList/${file}">Nézegető</a></td></tr>`
                 break;
             case "en":
-                lists += `<tr><td><a href="/rawList/${file}">${file.replace(".txt","")}</a></td><td><a href="/loadList/${file}/${lang}">Cards</a></td><td><a href="/writeList/${file}/${lang}">Write</a></td><td><a href="/viewList/${file}/${lang}">Viewer</a></td></tr>`
+                lists += `<tr><td><a href="/rawList/${file}">${file.replace(".txt","")}</a></td><td><a href="/loadList/${file}/${lang}">Cards</a></td><td><a href="/writeList/${file}/${lang}">Write</a></td><td><a href="/viewList/${file}">Viewer</a></td></tr>`
                 break;
             default:
-                lists += `<tr><td><a href="/rawList/${file}">${file.replace(".txt","")}</a></td><td><a href="/loadList/${file}/${lang}">Kártya</a></td><td><a href="/writeList/${file}/${lang}">Írás</a></td><td><a href="/viewList/${file}/${lang}">Nézegető</a></td></tr>`
+                lists += `<tr><td><a href="/rawList/${file}">${file.replace(".txt","")}</a></td><td><a href="/loadList/${file}/${lang}">Kártya</a></td><td><a href="/writeList/${file}/${lang}">Írás</a></td><td><a href="/viewList/${file}">Nézegető</a></td></tr>`
                 break;
         }
     });
