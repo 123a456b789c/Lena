@@ -14,10 +14,10 @@
         }
         function setupGender(sex) {
             if (sex == "woman") {
-                document.cookie = "sex=woman"
+                document.cookie = "sex=woman" + "; expires=Fri, 31 Dec 2050 23:59:59 GMT"
             }
             if (sex == "man") {
-                document.cookie = "sex=man"
+                document.cookie = "sex=man" + "; expires=Fri, 31 Dec 2050 23:59:59 GMT"
             }
             document.getElementById("genderDiv").style.display = "none"
         }
