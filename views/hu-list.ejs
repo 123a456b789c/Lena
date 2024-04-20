@@ -27,7 +27,7 @@
             var mc = new Hammer(article);
             mc.get('pan').set({ direction: Hammer.DIRECTION_ALL });
             mc.on("panleft panright tap", function(ev) {
-                 if (ev.type == "panleft") {
+                 if (ev.type == "panleft"  && window.swipeable == true) {
                     if (window.canSwipe == false) {
                         return;
                     }
@@ -37,7 +37,7 @@
                         window.canSwipe = true;
                     }, 400);
                  }
-                 if (ev.type == "panright") {
+                 if (ev.type == "panright" && window.swipeable == true) {
                     if (window.canSwipe == false) {
                         return;
                     }       
@@ -47,7 +47,7 @@
                         window.canSwipe = true;
                     }, 400);
                  }
-                    if (ev.type == "tap" && ev.target.tagName != "BUTTON" && ev.target.tagName != "A") {
+                    if (ev.type == "tap" && ev.target.tagName != "BUTTON" && ev.target.tagName != "A" && window.swipeable == true) {
                         if (window.canSwipe == false) {
                         return;
                         }   
@@ -105,6 +105,10 @@
             document.getElementById("cardinside").innerHTML = "<p>" + window.questionArray[randomIndex] + "</p>";
             setRemaining();
         }
+
+        function setGesture() {
+            window.swipeable = !window.swipeable;
+        }
     </script>
     <style>
         div > p {
@@ -125,6 +129,9 @@
         </ul>
     </nav>
     <div style="margin-left: 10px; margin-right: 10px;">
+        <label style="margin-left: 10px;">Gesztusvezérlés
+        <input onclick="setGesture()" type="checkbox" role="switch" />
+        </label>
     <article id="hammer-area">
         <header><p style="margin-bottom: 10px;" id="remaining"></p></header>
         <div id="cardinside"></div>
